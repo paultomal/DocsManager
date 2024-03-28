@@ -50,17 +50,17 @@ public class UserServices {
 
         UserInfo userInfo = new UserInfo();
 
-            userInfoDTO.setPassword(userInfoDTO.getPassword());
-            userInfo.setName(userInfoDTO.getName());
-            userInfo.setUsername(userInfoDTO.getUsername().toLowerCase());
-            userInfo.setEmail(userInfoDTO.getEmail());
-            userInfo.setPassword(userInfoDTO.getPassword());
-            userInfo.setContact(userInfoDTO.getContact());
-            UserRoles userRoles = UserRoles.getUserRolesByLabel("Supervisor");
-            userInfo.setRoles(userRoles);
-            userRepository.save(userInfo);
+        userInfoDTO.setPassword(userInfoDTO.getPassword());
+        userInfo.setName(userInfoDTO.getName());
+        userInfo.setUsername(userInfoDTO.getUsername().toLowerCase());
+        userInfo.setEmail(userInfoDTO.getEmail());
+        userInfo.setPassword(userInfoDTO.getPassword());
+        userInfo.setContact(userInfoDTO.getContact());
+        UserRoles userRoles = UserRoles.getUserRolesByLabel("Supervisor");
+        userInfo.setRoles(userRoles);
+        userRepository.save(userInfo);
 
-            return userInfo;
+        return userInfo;
     }
 
 
@@ -88,7 +88,14 @@ public class UserServices {
         return null;
     }
 
-
+    public Boolean deleteSupervisor(Long id) {
+        Optional<UserInfo> userInfo = userRepository.findById(id);
+        if (userInfo.isPresent()) {
+            userRepository.delete(userInfo.get());
+            return true;
+        }
+        return false;
+    }
 
     //employee
 
@@ -134,5 +141,15 @@ public class UserServices {
         }
         return null;
     }
+
+    public Boolean deleteEmployee(Long id) {
+        Optional<UserInfo> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            userRepository.delete(userOptional.get());
+            return true;
+        }
+        return false;
+    }
+
 
 }

@@ -55,7 +55,7 @@ public class SupervisorController {
     }
 
     @PutMapping("/updateSupervisor/{id}")
-    public ResponseEntity<?> updateAdmin(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id) {
+    public ResponseEntity<?> updateSupervisor(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id) {
 
         UserInfo user = userServices.getSupervisorById(id);
 
@@ -67,5 +67,25 @@ public class SupervisorController {
         }
 
     }
+
+    @DeleteMapping("/deleteSupervisor/{id}")
+    public ResponseEntity<?> deleteSupervisor(@PathVariable Long id){
+
+
+        UserInfo userInfo = userServices.getSupervisorById(id);
+        if (userInfo != null && userInfo.getRoles().equals(UserRoles.ROLE_SUPERVISOR)){
+            Boolean deleted = userServices.deleteSupervisor(id);
+            if (deleted) {
+                return new ResponseEntity<>("Supervisor " + id + " is deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Supervisor not found", HttpStatus.NOT_FOUND);
+            }
+        }else {
+            return new ResponseEntity<>("Supervisor not found", HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
 
 }

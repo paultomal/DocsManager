@@ -55,13 +55,30 @@ public class EmployeeController {
     }
 
     @PutMapping("/updateEmployee/{id}")
-    public ResponseEntity<?> updateEmployee(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id){
+    public ResponseEntity<?> updateEmployee(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id) {
         UserInfo user = userServices.getEmployeeById(id);
 
         if (user != null && user.getRoles().equals(UserRoles.ROLE_EMPLOYEE)) {
             UserInfoDTO userInfoDTO1 = UserInfoDTO.form(userServices.updateEmployee(userInfoDTO, id));
             return new ResponseEntity<>(userInfoDTO1, HttpStatus.OK);
         } else {
+            return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/deleteEmployee/{id}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+
+        UserInfo user = userServices.getEmployeeById(id);
+
+        if (user != null && user.getRoles().equals(UserRoles.ROLE_EMPLOYEE)) {
+            Boolean deleted = userServices.deleteEmployee(id);
+            if (deleted) {
+                return new ResponseEntity<>("Employee " + id + " is deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
+            }
+        }else {
             return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
         }
     }
