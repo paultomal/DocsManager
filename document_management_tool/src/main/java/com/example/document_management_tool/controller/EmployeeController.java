@@ -55,12 +55,14 @@ public class EmployeeController {
     }
 
     @PutMapping("/updateEmployee/{id}")
-    public ResponseEntity<?> updateEmployee(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id) /*throws UserIsNotFoundException*/ {
-/*     if (userServices.getSupervisorById(id) == null){
-            throw new UserIsNotFoundException("Employee "+ id + " is not Found.");
-        }*/
-        UserInfoDTO userInfoDTO1 = UserInfoDTO.form(userServices.updateEmployee(userInfoDTO, id));
-        return new ResponseEntity<>(userInfoDTO1, HttpStatus.OK);
-    }
+    public ResponseEntity<?> updateEmployee(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id){
+        UserInfo user = userServices.getEmployeeById(id);
 
+        if (user != null && user.getRoles().equals(UserRoles.ROLE_EMPLOYEE)) {
+            UserInfoDTO userInfoDTO1 = UserInfoDTO.form(userServices.updateEmployee(userInfoDTO, id));
+            return new ResponseEntity<>(userInfoDTO1, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
+        }
+    }
 }

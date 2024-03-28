@@ -55,13 +55,17 @@ public class SupervisorController {
     }
 
     @PutMapping("/updateSupervisor/{id}")
-    public ResponseEntity<?> updateAdmin(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id) /*throws UserIsNotFoundException*/ {
-/*     if (userServices.getSupervisorById(id) == null){
-            throw new UserIsNotFoundException("Supervisor "+ id + " is not Found.");
-        }*/
-        UserInfoDTO userInfoDTO1 = UserInfoDTO.form(userServices.updateSupervisor(userInfoDTO, id));
-        return new ResponseEntity<>(userInfoDTO1, HttpStatus.OK);
-    }
+    public ResponseEntity<?> updateAdmin(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id) {
 
+        UserInfo user = userServices.getSupervisorById(id);
+
+        if (user != null && user.getRoles().equals(UserRoles.ROLE_SUPERVISOR)) {
+            UserInfoDTO userInfoDTO1 = UserInfoDTO.form(userServices.updateSupervisor(userInfoDTO, id));
+            return new ResponseEntity<>(userInfoDTO1, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Supervisor not found", HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 }
