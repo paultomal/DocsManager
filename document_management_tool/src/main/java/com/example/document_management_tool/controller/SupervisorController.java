@@ -3,6 +3,8 @@ package com.example.document_management_tool.controller;
 import com.example.document_management_tool.dto.UserInfoDTO;
 import com.example.document_management_tool.entity.UserInfo;
 import com.example.document_management_tool.enums.UserRoles;
+import com.example.document_management_tool.exceptions.EmailAlreadyTakenException;
+import com.example.document_management_tool.exceptions.UserNameAlreadyTakenException;
 import com.example.document_management_tool.service.UserServices;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,13 +23,13 @@ public class SupervisorController {
     }
 
     @PostMapping("/addSupervisor")
-    public ResponseEntity<?> saveSupervisor(@Valid @RequestBody UserInfoDTO userInfoDTO) /*throws EmailAlreadyTakenException, UserNameAlreadyTakenException*/ {
-/*        if(userServices.getUserByEmail(userInfoDTO.getEmail()).isPresent()) {
+    public ResponseEntity<?> saveSupervisor(@Valid @RequestBody UserInfoDTO userInfoDTO) throws UserNameAlreadyTakenException, EmailAlreadyTakenException {
+        if(userServices.getUserByEmail(userInfoDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyTakenException(userInfoDTO.getEmail() + " is already registered!!! Try Another");
         }
         if (userServices.getUserByUserName(userInfoDTO.getUsername()).isPresent()) {
             throw new UserNameAlreadyTakenException(userInfoDTO.getUsername() + "is already registered!! Try Another");
-        }*/
+        }
         UserInfoDTO userInfoDTO1 = UserInfoDTO.form(userServices.saveSupervisor(userInfoDTO));
         return new ResponseEntity<>(userInfoDTO1, HttpStatus.OK);
     }
