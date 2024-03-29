@@ -38,7 +38,7 @@ public class PdfService {
 
         PdfWriter.getInstance(document, out);
 
-        HeaderFooter footer = new HeaderFooter(true, new Phrase(" Paul Tomal"));
+        HeaderFooter footer = new HeaderFooter(false, new Phrase(" Paul Tomal"));
         footer.setAlignment(Element.ALIGN_CENTER);
         footer.setBorderWidthBottom(0);
         document.setFooter(footer);

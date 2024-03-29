@@ -32,8 +32,8 @@ public class UserInfoDTO {
     private String roles;
 
 
-    public static UserInfoDTO form(UserInfo userInfo){
-        if(userInfo == null)
+    public static UserInfoDTO form(UserInfo userInfo) {
+        if (userInfo == null)
             return null;
 
         UserInfoDTO userInfoDTO = new UserInfoDTO();

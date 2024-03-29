@@ -26,8 +26,8 @@ public class DocumentDTO {
 
     private Long userId;
 
-    public static DocumentDTO form(Documents documents){
-        if(documents == null)
+    public static DocumentDTO form(Documents documents) {
+        if (documents == null)
             return null;
 
         DocumentDTO documentDTO = new DocumentDTO();

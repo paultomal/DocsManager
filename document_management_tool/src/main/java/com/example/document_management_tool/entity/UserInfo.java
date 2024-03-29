@@ -1,4 +1,5 @@
 package com.example.document_management_tool.entity;
+
 import com.example.document_management_tool.enums.UserRoles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
