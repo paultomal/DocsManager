@@ -10,11 +10,20 @@ User signup and login.
 CRUD for docs with access control.
 Add/Update access for a doc.
 
-Additional Considerations:
-You can use the built in sqlite3 database.
-You can manage the docs in any way you want, so choose the most scalable system.
+#Tools :
+Intellij, MySql, Postman, Git
 
-Deliverables: 
-A live link of the backend application.
-Source code for the backend, along with instructions on how to set up and run the application.
-API Documentation. 
+#Language :
+Java
+Version JDK 17
+
+#Framework :
+Spring Boot
+Version Spring 3.2.4
+
+#Project :
+Gradle - Groovy
+
+#3rd Party Library :
+OpenPDF
+GitHub link: https://github.com/LibrePDF/OpenPDF
