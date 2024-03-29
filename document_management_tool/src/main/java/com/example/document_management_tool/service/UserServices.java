@@ -4,6 +4,8 @@ import com.example.document_management_tool.dto.UserInfoDTO;
 import com.example.document_management_tool.entity.UserInfo;
 import com.example.document_management_tool.enums.UserRoles;
 import com.example.document_management_tool.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,32 +14,14 @@ import java.util.Optional;
 @Service
 
 public class UserServices {
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     public UserServices(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-
-    public UserInfo saveSuperAdmin(UserInfoDTO userInfoDTO) {
-
-        UserInfo userInfo = new UserInfo();
-
-
-        userInfoDTO.setPassword(userInfoDTO.getPassword());
-        userInfo.setName(userInfoDTO.getName());
-        userInfo.setUsername(userInfoDTO.getUsername().toLowerCase());
-        userInfo.setEmail(userInfoDTO.getEmail());
-        userInfo.setPassword(userInfoDTO.getPassword());
-        userInfo.setContact(userInfoDTO.getContact());
-        UserRoles userRoles = UserRoles.getUserRolesByLabel("Root");
-        userInfo.setRoles(userRoles);
-        userInfo = userRepository.save(userInfo);
-
-        return userInfo;
-
-    }
 
     //Supervisor
 
@@ -46,7 +30,7 @@ public class UserServices {
 
         UserInfo userInfo = new UserInfo();
 
-        userInfoDTO.setPassword(userInfoDTO.getPassword());
+        userInfoDTO.setPassword(passwordEncoder.encode(userInfoDTO.getPassword()));
         userInfo.setName(userInfoDTO.getName());
         userInfo.setUsername(userInfoDTO.getUsername().toLowerCase());
         userInfo.setEmail(userInfoDTO.getEmail());
@@ -100,7 +84,7 @@ public class UserServices {
 
         UserInfo userInfo = new UserInfo();
 
-        userInfoDTO.setPassword(userInfoDTO.getPassword());
+        userInfoDTO.setPassword(passwordEncoder.encode(userInfoDTO.getPassword()));
         userInfo.setName(userInfoDTO.getName());
         userInfo.setUsername(userInfoDTO.getUsername().toLowerCase());
         userInfo.setEmail(userInfoDTO.getEmail());

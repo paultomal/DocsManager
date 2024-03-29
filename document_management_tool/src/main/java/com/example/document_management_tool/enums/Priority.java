@@ -11,12 +11,6 @@ public enum Priority {
         this.label = label;
     }
 
-    public static Priority getPriorityByLabel(String label) {
-        for (Priority priority : Priority.values()) {
-            if (priority.label.equals(label)) return priority;
-        }
-        return null;
-    }
     public static Priority getPriorityFromString(String priorityString) {
         for (Priority priority : Priority.values()) {
             if (priority.toString().equalsIgnoreCase(priorityString)) {

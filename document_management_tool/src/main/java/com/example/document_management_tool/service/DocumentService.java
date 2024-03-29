@@ -41,15 +41,14 @@ public class DocumentService {
 
 
     public List<Documents> getAllDocuments() {
-            return documentRepository.findAll();
+        return documentRepository.findAll();
     }
-
 
 
     public Documents updateDocument(DocumentDTO documentDTO, Long id) {
         Optional<Documents> document = documentRepository.findById(id);
 
-        if (document.isPresent()){
+        if (document.isPresent()) {
             Documents documents1 = document.get();
             documents1.setSubject(documentDTO.getSubject());
             documents1.setMessage(documentDTO.getMessage());

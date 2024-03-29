@@ -9,12 +9,14 @@ import com.example.document_management_tool.service.UserServices;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
+
 public class EmployeeController {
     private final UserServices userServices;
 
@@ -22,9 +24,10 @@ public class EmployeeController {
         this.userServices = userServices;
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ROOT','ROLE_EMPLOYEE')")
     @PostMapping("/addEmployee")
     public ResponseEntity<?> saveEmployee(@Valid @RequestBody UserInfoDTO userInfoDTO) throws EmailAlreadyTakenException, UserNameAlreadyTakenException {
-        if(userServices.getUserByEmail(userInfoDTO.getEmail()).isPresent()) {
+        if (userServices.getUserByEmail(userInfoDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyTakenException(userInfoDTO.getEmail() + " is already registered!!! Try Another");
         }
         if (userServices.getUserByUserName(userInfoDTO.getUsername()).isPresent()) {
@@ -34,6 +37,7 @@ public class EmployeeController {
         return new ResponseEntity<>(userInfoDTO1, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ROOT')")
     @GetMapping("/getAllEmployees")
     public ResponseEntity<?> getAllEmployees() {
         List<UserInfo> userInfos = userServices.getAllEmployees();
@@ -44,6 +48,7 @@ public class EmployeeController {
         return new ResponseEntity<>(admin, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ROOT','ROLE_SUPERVISOR','ROLE_EMPLOYEE')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployeeById(@PathVariable Long id) {
         UserInfo user = userServices.getEmployeeById(id);
@@ -56,6 +61,7 @@ public class EmployeeController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ROOT','ROLE_EMPLOYEE')")
     @PutMapping("/updateEmployee/{id}")
     public ResponseEntity<?> updateEmployee(@Valid @RequestBody UserInfoDTO userInfoDTO, @PathVariable Long id) {
         UserInfo user = userServices.getEmployeeById(id);
@@ -68,6 +74,7 @@ public class EmployeeController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ROOT','ROLE_EMPLOYEE')")
     @DeleteMapping("/deleteEmployee/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
 
@@ -80,7 +87,7 @@ public class EmployeeController {
             } else {
                 return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
             }
-        }else {
+        } else {
             return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
         }
     }
