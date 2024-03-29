@@ -2,7 +2,7 @@ package com.example.document_management_tool.controller;
 
 import com.example.document_management_tool.dto.DocumentDTO;
 import com.example.document_management_tool.dto.UserInfoDTO;
-import com.example.document_management_tool.entity.Document;
+import com.example.document_management_tool.entity.Documents;
 import com.example.document_management_tool.entity.UserInfo;
 import com.example.document_management_tool.enums.UserRoles;
 import com.example.document_management_tool.service.DocumentService;
@@ -32,10 +32,22 @@ public class DocumentController {
     @GetMapping("/getAllDocuments")
     public ResponseEntity<?> getAllDocuments() {
 
-        List<Document> document = documentService.getAllDocuments();
-        List<DocumentDTO> documentDTOS = document.stream().map(DocumentDTO::form).toList();
+        List<Documents> documents = documentService.getAllDocuments();
+        List<DocumentDTO> documentDTOS = documents.stream().map(DocumentDTO::form).toList();
 
         return new ResponseEntity<>(documentDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDocumentById(@PathVariable Long id) {
+        Documents documents = documentService.getDocumentById(id);
+
+        if (documents != null) {
+            DocumentDTO documentDTO = DocumentDTO.form(documents);
+            return new ResponseEntity<>(documentDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Document not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/updateDocument/{id}")

@@ -1,13 +1,11 @@
 package com.example.document_management_tool.dto;
 
-import com.example.document_management_tool.entity.Document;
+import com.example.document_management_tool.entity.Documents;
 import com.example.document_management_tool.enums.Priority;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,17 +23,21 @@ public class DocumentDTO {
     private String message;
 
     private String priority;
-    public static DocumentDTO form(Document document){
-        if(document == null)
+
+    private Long userId;
+
+    public static DocumentDTO form(Documents documents){
+        if(documents == null)
             return null;
 
         DocumentDTO documentDTO = new DocumentDTO();
-        documentDTO.setId(document.getId());
-        documentDTO.setUsername(document.getUserInfo().getUsername());
-        documentDTO.setSubject(document.getSubject());
-        documentDTO.setMessage(document.getMessage());
+        documentDTO.setId(documents.getId());
+        documentDTO.setUsername(documents.getUserInfo().getUsername());
+        documentDTO.setSubject(documents.getSubject());
+        documentDTO.setMessage(documents.getMessage());
+        documentDTO.setUserId(documents.getUserInfo().getId());
 
-        String priority = Priority.getLabelByPriority(document.getPriority());
+        String priority = Priority.getLabelByPriority(documents.getPriority());
         documentDTO.setPriority(priority);
         return documentDTO;
     }

@@ -1,7 +1,7 @@
 package com.example.document_management_tool.service;
 
 import com.example.document_management_tool.dto.DocumentDTO;
-import com.example.document_management_tool.entity.Document;
+import com.example.document_management_tool.entity.Documents;
 import com.example.document_management_tool.entity.UserInfo;
 import com.example.document_management_tool.enums.Priority;
 import com.example.document_management_tool.repository.DocumentRepository;
@@ -23,53 +23,56 @@ public class DocumentService {
     }
 
     @Transactional
-    public Document saveDocument(DocumentDTO documentDTO) {
+    public Documents saveDocument(DocumentDTO documentDTO) {
+        UserInfo userInfo = userRepository.findByUsername(documentDTO.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Optional<UserInfo> userInfo = userRepository.findByUsername(documentDTO.getUsername());
-        Document document = new Document();
+        Documents documents = new Documents();
+        documents.setUserInfo(userInfo);
+        documents.setSubject(documentDTO.getSubject());
+        documents.setMessage(documentDTO.getMessage());
 
-        if (userInfo.isPresent()) {
+        Priority priority = Priority.getPriorityFromString(documentDTO.getPriority());
+        documents.setPriority(priority);
 
-            UserInfo userName = userRepository.findByUsername(documentDTO.getUsername()).orElseThrow(RuntimeException::new);
-            document.setUserInfo(userName);
-            document.setSubject(documentDTO.getSubject());
-            document.setMessage(documentDTO.getMessage());
-
-            Priority priority = Priority.getPriorityFromString(documentDTO.getPriority());
-            document.setPriority(priority);
-
-            documentRepository.save(document);
-        }
-        return document;
+        documentRepository.save(documents);
+        return documents;
     }
 
 
-    public List<Document> getAllDocuments() {
+    public List<Documents> getAllDocuments() {
             return documentRepository.findAll();
     }
 
-    public Document updateDocument(DocumentDTO documentDTO, Long id) {
-        Optional<Document> document = documentRepository.findById(id);
+
+
+    public Documents updateDocument(DocumentDTO documentDTO, Long id) {
+        Optional<Documents> document = documentRepository.findById(id);
 
         if (document.isPresent()){
-            Document document1 = document.get();
-            document1.setSubject(documentDTO.getSubject());
-            document1.setMessage(documentDTO.getMessage());
+            Documents documents1 = document.get();
+            documents1.setSubject(documentDTO.getSubject());
+            documents1.setMessage(documentDTO.getMessage());
 
             Priority priority = Priority.getPriorityFromString(documentDTO.getPriority());
-            document1.setPriority(priority);
+            documents1.setPriority(priority);
 
-            return documentRepository.save(document1);
+            return documentRepository.save(documents1);
         }
         return null;
     }
 
     public Boolean deleteDocument(Long id) {
-        Optional<Document> document = documentRepository.findById(id);
+        Optional<Documents> document = documentRepository.findById(id);
         if (document.isPresent()) {
             documentRepository.delete(document.get());
             return true;
         }
         return false;
+    }
+
+    public Documents getDocumentById(Long id) {
+        Optional<Documents> documents = documentRepository.findById(id);
+        return documents.orElseThrow();
     }
 }
