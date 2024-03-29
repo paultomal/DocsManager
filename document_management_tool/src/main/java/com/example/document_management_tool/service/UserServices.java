@@ -19,9 +19,10 @@ public class UserServices {
         this.userRepository = userRepository;
     }
 
-    UserInfo userInfo = new UserInfo();
 
     public UserInfo saveSuperAdmin(UserInfoDTO userInfoDTO) {
+
+        UserInfo userInfo = new UserInfo();
 
 
         userInfoDTO.setPassword(userInfoDTO.getPassword());
@@ -42,6 +43,8 @@ public class UserServices {
 
     public UserInfo saveSupervisor(UserInfoDTO userInfoDTO) {
 
+
+        UserInfo userInfo = new UserInfo();
 
         userInfoDTO.setPassword(userInfoDTO.getPassword());
         userInfo.setName(userInfoDTO.getName());

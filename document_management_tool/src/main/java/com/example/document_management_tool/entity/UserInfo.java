@@ -38,5 +38,5 @@ public class UserInfo {
     private String contact;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
-    private List<Document> documentList;
+    private List<Documents> documentsList;
 }

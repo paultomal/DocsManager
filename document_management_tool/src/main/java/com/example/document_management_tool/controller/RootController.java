@@ -20,7 +20,7 @@ public class RootController {
         this.userServices = userServices;
     }
     @PostMapping("/addRoot")
-    public ResponseEntity<?> save(@Valid @RequestBody UserInfoDTO userInfoDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> save(@Valid @RequestBody UserInfoDTO userInfoDTO) {
         UserInfoDTO userInfoDTO1 = UserInfoDTO.form(userServices.saveSuperAdmin(userInfoDTO));
         return new ResponseEntity<>(userInfoDTO1, HttpStatus.CREATED);
     }
