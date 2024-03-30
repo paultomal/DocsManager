@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -22,6 +24,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final UserInfoUserDetailsService userDetailsService;
     private String username = null;
+    private String email = null;
+    private List<GrantedAuthority> roles = null; // Change to List<GrantedAuthority>
+
+
 
     public JwtAuthFilter(JwtService jwtService,
                          UserInfoUserDetailsService userDetailsService) {
@@ -66,12 +72,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                    this.roles = (List<GrantedAuthority>) userDetails.getAuthorities();
+
                 }
             }
         }
 
         filterChain.doFilter(request, response);
     }
+
 
     private boolean isUrlExcludedFromAuthentication(String requestUri) {
         String[] excludedUrls = {"/authenticate"};
@@ -82,5 +92,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
         return false;
+    }
+
+    public String getCurrentUser() {
+        return email;
+    }
+
+    public Boolean isSupervisor() {
+        return roles != null && roles.stream().anyMatch(role -> role.getAuthority().equals("ROLE_SUPERVISOR"));
+    }
+
+    public Boolean isEmployee() {
+        return roles != null && roles.stream().anyMatch(role -> role.getAuthority().equals("ROLE_EMPLOYEE"));
     }
 }
