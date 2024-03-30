@@ -13,6 +13,9 @@ Add/Update access for a doc.
 ## Tools :
 Intellij, MySql, Postman, Git
 
+## Operating System :
+Linux
+
 ## Language :
 Java
 Version JDK 17
