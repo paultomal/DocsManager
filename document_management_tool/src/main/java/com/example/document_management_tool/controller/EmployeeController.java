@@ -1,10 +1,14 @@
 package com.example.document_management_tool.controller;
 
+import com.example.document_management_tool.dto.ChangePassword;
 import com.example.document_management_tool.dto.UserInfoDTO;
 import com.example.document_management_tool.entity.UserInfo;
 import com.example.document_management_tool.enums.UserRoles;
 import com.example.document_management_tool.exceptions.EmailAlreadyTakenException;
+import com.example.document_management_tool.exceptions.IllegalActionException;
+import com.example.document_management_tool.exceptions.UserIsNotFoundException;
 import com.example.document_management_tool.exceptions.UserNameAlreadyTakenException;
+import com.example.document_management_tool.security.JwtAuthFilter;
 import com.example.document_management_tool.service.UserServices;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -13,15 +17,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/employee")
 
 public class EmployeeController {
     private final UserServices userServices;
+    private final JwtAuthFilter jwtAuthFilter;
 
-    public EmployeeController(UserServices userServices) {
+
+    public EmployeeController(UserServices userServices, JwtAuthFilter jwtAuthFilter) {
         this.userServices = userServices;
+        this.jwtAuthFilter = jwtAuthFilter;
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ROOT','ROLE_EMPLOYEE')")
@@ -90,5 +98,22 @@ public class EmployeeController {
         } else {
             return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
+    @PutMapping("/changePassword/{id}")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePassword changePassword, @PathVariable Long id) throws IllegalActionException, UserIsNotFoundException {
+        if(userServices.getEmployeeById(id) == null)
+            throw new UserIsNotFoundException("There is no student with ID " + id + "!!!" + "Try Again");
+
+        if(Objects.equals(jwtAuthFilter.getCurrentUser(), userServices.getEmployeeById(id).getEmail()) || jwtAuthFilter.isEmployee()) {
+            String message = userServices.changeEmployeePassword(changePassword, id);
+            if(message.equalsIgnoreCase("Password Changed")){
+                return new ResponseEntity<>(message, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
+
+        throw new IllegalActionException("You can not change other employee's password!!!");
     }
 }

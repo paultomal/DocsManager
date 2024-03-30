@@ -62,5 +62,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalActionException.class)
+    public ResponseEntity<?> customIllegalActionExceptionHandling(IllegalActionException exception) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), "Illegal Action Detected!!!", exception.getMessage());
+        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+    }
+
 
 }

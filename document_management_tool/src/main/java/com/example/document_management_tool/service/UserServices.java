@@ -1,5 +1,6 @@
 package com.example.document_management_tool.service;
 
+import com.example.document_management_tool.dto.ChangePassword;
 import com.example.document_management_tool.dto.UserInfoDTO;
 import com.example.document_management_tool.entity.UserInfo;
 import com.example.document_management_tool.enums.UserRoles;
@@ -77,6 +78,16 @@ public class UserServices {
         return false;
     }
 
+    public String changePassword(ChangePassword changePassword, Long id) {
+        UserInfo userInfo = getSupervisorById(id);
+        if(passwordEncoder.matches(changePassword.getOldPassword(), userInfo.getPassword()) ) {
+            userInfo.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+            userRepository.save(userInfo);
+            return "Password Changed";
+        }
+        return "Password did not match!!! Try Again";
+    }
+
     //employee
 
 
@@ -131,6 +142,16 @@ public class UserServices {
         return false;
     }
 
+    public String changeEmployeePassword(ChangePassword changePassword, Long id) {
+        UserInfo userInfo = getEmployeeById(id);
+        if(passwordEncoder.matches(changePassword.getOldPassword(), userInfo.getPassword()) ) {
+            userInfo.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+            userRepository.save(userInfo);
+            return "Password Changed";
+        }
+        return "Password did not match!!! Try Again";
+    }
+
     public Optional<UserInfo> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -138,5 +159,6 @@ public class UserServices {
     public Optional<UserInfo> getUserByUserName(String username) {
         return userRepository.findByUsername(username);
     }
+
 
 }
