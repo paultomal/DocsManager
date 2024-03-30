@@ -1,6 +1,6 @@
 # BEM-GROUP_task
 
-#Task :
+## Task :
 Develop an API system for a document management tool with the following features:
 Create, Update, and delete new documents.
 Share documents with others.
@@ -10,29 +10,30 @@ User signup and login.
 CRUD for docs with access control.
 Add/Update access for a doc.
 
-#Tools :
+## Tools :
 Intellij, MySql, Postman, Git
 
-#Language :
+## Language :
 Java
 Version JDK 17
 
-#Framework :
-Spring Boot
+## Framework :
+Spring Boot\
 Version Spring 3.2.4
 
-#Project :
+## Project :
 Gradle - Groovy
 
-#3rd Party Library :
-OpenPDF
+## 3rd Party Library :
+OpenPDF\
 GitHub link: https://github.com/LibrePDF/OpenPDF
 
-#API Documentation :
+## API Documentation :
 Postman link : https://documenter.getpostman.com/view/26556785/2sA35G3hDT
 
-#ROOT Login{default} :
-API : localhost:9191/authenticate
+## ROOT Login{default} :
+API : localhost:9191/authenticate\
+JSON
 {
     "username": "root",
     "password": "root"
