@@ -84,7 +84,7 @@ public class AuthController {
             UserInfo user = new UserInfo();
             user.setName("root");
             user.setUsername("root");
-            user.setEmail("root@jotno.net");
+            user.setEmail("root@bem.net");
             user.setPassword(passwordEncoder.encode("root"));
             user.setRoles(UserRoles.ROLE_ROOT);
 
