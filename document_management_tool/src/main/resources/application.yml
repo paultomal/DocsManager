@@ -1,7 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/documentmanagementtools
+    username: root
+    password: 42123t@Mal!
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 9191
+
 springdoc:
   api-docs:
-    path: ${SWAGGER_API_DOCS_PATH:/api-docs}
+    path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
-springdoc-swagger-ui:
-  path: ${SWAGGER_PATH:/swagger-ui.html}
+    display-request-duration: true
+    persist-authorization: true
+
